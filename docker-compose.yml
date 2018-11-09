@@ -1,0 +1,33 @@
+version: '2.1'
+services:
+  plex:
+    container_name: plex
+    image: plexinc/pms-docker
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - TZ=CST
+      - PLEX_CLAIM=claim-pyE78hTpoX1HFq666tnc
+      - PLEX_UID=1000
+      - PLEX_GID=1000
+    volumes:
+      - /torrent/plex/:/config
+      - /torrent/plex/:/transcode
+      - /torrent/qbittorrent:/data
+  
+  torrent:
+    container_name: torrent
+    image: linuxserver/qbittorrent
+    restart: unless-stopped
+    depends_on: 
+     - plex
+    network_mode: host
+    environment:
+     - PGID=1000
+     - PUID=1000  
+     - UMASK_SET=022 
+     - WEBUI_PORT=8080 
+     - TZ=CST
+    volumes:
+     - /torrent/qbittorrent:/config
+     - /torrent/qbittorrent:/downloads
