@@ -119,6 +119,8 @@ services:
     - NET_ADMIN
     - SYS_PTRACE
     restart: always
+    cap_add:
+    - NET_ADMIN
 volumes:
   maildata:
     driver: local
